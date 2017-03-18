@@ -1,17 +1,21 @@
-## Magicodes.DevelopTools   开发者工具
+# Magicodes.DevelopTools   开发者工具
 
-Magicodes.CmdTools  命令行辅助工具
-copy	复制文件
+### Magicodes.CmdTools  命令行辅助工具
+
+#### copy	复制文件
 	-s  源路径（必填）
 	-t	目标路径（必填）
 	-c	配置文件路径
 	-d	调试模式，默认false
 
-order	文本排序
+
+#### order	文本排序
 	-s  源路径（必填）
 	-t	目标路径
 
-Demo:
+
+#### Demo:
+
 	call "tools/Magicodes.CmdTools.exe" order -s "changeList.txt"
 	将文件"changeList.txt"内的文本进行排序，并去除重复项以及首尾空格
 
