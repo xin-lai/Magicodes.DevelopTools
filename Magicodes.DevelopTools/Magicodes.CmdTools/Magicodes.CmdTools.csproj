@@ -43,10 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdActionsManager.cs" />
     <Compile Include="CmdOptions\CopyOptions.cs" />
-    <Compile Include="CmdOptions\MoveOptions.cs" />
     <Compile Include="CmdOptions\OrderOptions.cs" />
     <Compile Include="Helper\IoHelper.cs" />
+    <Compile Include="ICmdAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
