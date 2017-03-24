@@ -26,8 +26,32 @@ namespace Magicodes.CmdTools.Helper
             return path;
         }
 
+        public static void Copy(string sourceFilePath, string targetFilePath)
+        {
+            if (Directory.Exists(sourceFilePath))
+            {
+                if (!Directory.Exists(targetFilePath))
+                    Directory.CreateDirectory(targetFilePath);
+                CopyFiles(sourceFilePath, targetFilePath, true, true);
+            }
+            else if (File.Exists(sourceFilePath))
+            {
+                var path = Path.GetDirectoryName(targetFilePath);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                targetFilePath = Path.Combine(targetFilePath, Path.GetFileName(sourceFilePath));
+                File.Copy(sourceFilePath, targetFilePath, true);
+            }
+            else
+            {
+                Console.WriteLine("路径不存在：" + sourceFilePath);
+            }
+        }
+
         public static void CopyFiles(string sourceDir, string targetDir, bool overWrite, bool copySubDir)
         {
+
             //复制当前目录文件  
             foreach (string sourceFileName in Directory.GetFiles(sourceDir))
             {

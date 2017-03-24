@@ -25,14 +25,16 @@ namespace Magicodes.CmdTools
                         Console.WriteLine("targetPath：" + targetPath);
                         if (string.IsNullOrWhiteSpace(option.Config))
                         {
+                            Console.WriteLine("即将执行目录复制");
                             if (!option.Debug)
                             {
-                                IoHelper.CopyFiles(sourcePath, targetPath, true, true);
+                                IoHelper.Copy(sourcePath, targetPath);
                             }
                             else
                             {
                                 Console.WriteLine("sourcePath：" + sourcePath);
                                 Console.WriteLine("targetPath：" + targetPath);
+                                return;
                             }
                         }
                         var configPath = IoHelper.GetAbsolutePath(option.Config);
@@ -50,6 +52,7 @@ namespace Magicodes.CmdTools
                             {
                                 continue;
                             }
+                            fileName = fileName.Replace("/", "\\");
                             var sourceFilePath = Path.Combine(sourcePath, fileName);
                             var targetFilePath = Path.Combine(targetPath, fileName);
                             if (option.Debug)
@@ -59,19 +62,7 @@ namespace Magicodes.CmdTools
                             }
                             else
                             {
-                                if (Directory.Exists(sourceFilePath))
-                                {
-                                    IoHelper.CopyFiles(sourcePath, targetPath, true, true);
-                                }
-                                else
-                                {
-                                    if (!File.Exists(sourceFilePath))
-                                    {
-                                        Console.WriteLine("未找到文件或目录：" + sourceFilePath);
-                                        continue;
-                                    }
-                                }
-                                File.Copy(sourceFilePath, targetFilePath, true);
+                                IoHelper.Copy(sourceFilePath, targetFilePath);
                             }
                             Console.WriteLine("已复制：" + fileName);
                         }
@@ -88,7 +79,7 @@ namespace Magicodes.CmdTools
                             return;
                         }
                         var lines = File.ReadAllLines(sourcePath);
-                        var orders = lines.Select(p => p.Trim()).Where(p => !string.IsNullOrWhiteSpace(p)).Distinct().OrderBy(p => p).ToArray();
+                        var orders = lines.Select(p => p.Trim().Trim('"').Replace("\\", "/")).Where(p => !string.IsNullOrWhiteSpace(p)).Distinct().OrderBy(p => p).ToArray();
                         if (string.IsNullOrWhiteSpace(option.Target))
                         {
                             File.WriteAllLines(sourcePath, orders);
