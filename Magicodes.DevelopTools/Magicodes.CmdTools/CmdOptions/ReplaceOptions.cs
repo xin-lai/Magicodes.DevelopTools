@@ -17,19 +17,17 @@ namespace Magicodes.CmdTools.CmdOptions
 
         [Option('s', "source", Required = true,
           HelpText = "源字符串")]
-        public List<string> Source { get; set; }
+        public string Source { get; set; }
 
         [Option('t', "target", Required = true,
           HelpText = "目标字符串")]
-        public List<string> Target { get; set; }
+        public string Target { get; set; }
 
         [Option('i', "replacetext", HelpText = "是否替换文本")]
         public bool IsReplaceText { get; set; }
 
-        [Option('d', "debug",
-          HelpText = "调试模式")]
-        public bool Debug { get; set; }
-
+        private static string[] SourceArray { get; set; }
+        private static string[] TargetArray { get; set; }
 
         public void Execute(object agrs)
         {
@@ -39,21 +37,24 @@ namespace Magicodes.CmdTools.CmdOptions
                 Console.WriteLine("没有参数，无法执行！");
                 return;
             }
-            if (option.Source == null || option.Source.Count == 0)
+            if (string.IsNullOrWhiteSpace(option.Source))
             {
                 Console.WriteLine("请设置源！");
                 return;
             }
-            if (option.Target == null || option.Target.Count == 0)
+            if (string.IsNullOrWhiteSpace(option.Target))
             {
                 Console.WriteLine("请设置目标！");
                 return;
             }
-            if (option.Source.Count != option.Target.Count)
+            SourceArray = option.Source.Split(' ');
+            TargetArray = option.Target.Split(' ');
+            if (SourceArray.Length != TargetArray.Length)
             {
                 Console.WriteLine("目标和源不匹配！");
                 return;
             }
+
             var path = IoHelper.GetAbsolutePath(option.FileOrDirPath);
             if (File.Exists(path))
             {
@@ -80,7 +81,9 @@ namespace Magicodes.CmdTools.CmdOptions
                 var dirs = dirInfo.GetDirectories();
                 foreach (var item in dirs)
                 {
-                    item.MoveTo(Path.Combine(item.Parent.FullName, Replace(option, item.Name)));
+                    var target = Path.Combine(item.Parent.FullName, Replace(option, item.Name));
+                    if (item.FullName != target)
+                        item.MoveTo(target);
                     ReplaceDirectory(option, item.FullName);
                 }
             }
@@ -100,7 +103,9 @@ namespace Magicodes.CmdTools.CmdOptions
             }
             var fileName = Path.GetFileName(path);
             fileName = Replace(option, fileName);
-            File.Move(path, Path.GetFileName(path) + fileName);
+            var target = Path.Combine(Path.GetDirectoryName(path), fileName);
+            if (path != target)
+                File.Move(path, target);
         }
         /// <summary>
         /// 替换内容
@@ -111,9 +116,9 @@ namespace Magicodes.CmdTools.CmdOptions
         private string Replace(ReplaceOptions option, string text)
         {
 
-            for (int i = 0; i < option.Source.Count; i++)
+            for (int i = 0; i < SourceArray.Length; i++)
             {
-                text = text.Replace(option.Source[i], option.Target[i]);
+                text = text.Replace(SourceArray[i], TargetArray[i]);
             }
             return text;
         }

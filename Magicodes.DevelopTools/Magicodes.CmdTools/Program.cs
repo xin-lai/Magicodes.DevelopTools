@@ -13,7 +13,7 @@ namespace Magicodes.CmdTools
     {
         static void Main(string[] args)
         {
-            var obj = Parser.Default.ParseArguments<CopyOptions, OrderOptions>(args).Value;
+            var obj = Parser.Default.ParseArguments<CopyOptions, OrderOptions, ReplaceOptions>(args).Value;
             CmdActionsManager.Init();
             CmdActionsManager.ExecuteAction(obj);
             Console.WriteLine("Magicodes.CmdTools执行完毕！");
