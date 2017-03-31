@@ -9,7 +9,7 @@ using System.Text;
 namespace Magicodes.CmdTools.CmdOptions
 {
     [Verb("copy", HelpText = "复制文件")]
-    public class CopyOptions: ICmdAction
+    public class CopyOptions : ICmdAction
     {
         [Option('s', "source", Required = true,
           HelpText = "源文件夹路径")]
@@ -23,25 +23,44 @@ namespace Magicodes.CmdTools.CmdOptions
           HelpText = "配置文件路径")]
         public string Config { get; set; }
 
+        [Option('i', "ignore",
+         HelpText = "忽略的文件名&扩展名&目录名（多个请用分号分割）")]
+        public string Ignore { get; set; }
+
         [Option('d', "debug",
           HelpText = "调试模式")]
         public bool Debug { get; set; }
 
-        public Type OptionType => throw new NotImplementedException();
-
+       
         public void Execute(object agrs)
         {
-            var option = (CopyOptions)agrs;
+            var option = agrs as CopyOptions;
+            if (option == null)
+            {
+                Console.WriteLine("没有参数，无法执行！");
+                return;
+            }
             var sourcePath = IoHelper.GetAbsolutePath(option.Source);
             var targetPath = IoHelper.GetAbsolutePath(option.Target);
             Console.WriteLine("sourcePath：" + sourcePath);
             Console.WriteLine("targetPath：" + targetPath);
+            if (string.IsNullOrEmpty(option.Ignore))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("没有设置忽略文件，所有文件都将被复制！");
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+            else
+            {
+                Console.WriteLine("即将忽略以下内容：" + option.Ignore);
+            }
             if (string.IsNullOrWhiteSpace(option.Config))
             {
                 Console.WriteLine("即将执行复制");
                 if (!option.Debug)
                 {
-                    IoHelper.Copy(sourcePath, targetPath);
+
+                    IoHelper.Copy(sourcePath, targetPath, option.Ignore);
                 }
                 else
                 {
@@ -75,7 +94,7 @@ namespace Magicodes.CmdTools.CmdOptions
                     }
                     else
                     {
-                        IoHelper.Copy(sourceFilePath, targetFilePath);
+                        IoHelper.Copy(sourceFilePath, targetFilePath, option.Ignore);
                     }
                     Console.WriteLine("已复制：" + fileName);
                 }

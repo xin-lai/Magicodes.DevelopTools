@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdActionsManager.cs" />
+    <Compile Include="CmdOptions\ReplaceOptions.cs" />
     <Compile Include="CmdOptions\CopyOptions.cs" />
     <Compile Include="CmdOptions\OrderOptions.cs" />
     <Compile Include="Helper\IoHelper.cs" />
