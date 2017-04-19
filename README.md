@@ -37,3 +37,10 @@
 
     call "Magicodes.CmdTools.exe" replace -s "<#=modelTypeNameSpace#> <#=tPrimaryKey#> <#=modelTypeVarName#> <#=repositoryName#> businessPropertys" -t "<#=host.ModelLastNameSpace#> <#=host.PrimaryKeyShortTypeName#> <#=host.ModelVarName#> <#=host.RepositoryVarName#> host.BusinessProperties" -p "./tps/ModelProject" -i true
     将字符串<#=modelTypeNameSpace#>、<#=tPrimaryKey#>、<#=modelTypeVarName#>、<#=repositoryName#> 、businessPropertys（包括文件名中的此字符串）替换为<#=host.ModelLastNameSpace#>、<#=host.PrimaryKeyShortTypeName#>、<#=host.ModelVarName#>、<#=host.RepositoryVarName#>、host.BusinessProperties，替换目录为当前目录下的tps/ModelProject目录下的所有文件或目录以及文件内容
+
+#### 后续规划
+###### Nuget包支持
+    支持Nuget密钥存储和共享，支持工程生成并自动推送Nuget包
+
+###### EF迁移支持
+    兼容EF和EF Core
