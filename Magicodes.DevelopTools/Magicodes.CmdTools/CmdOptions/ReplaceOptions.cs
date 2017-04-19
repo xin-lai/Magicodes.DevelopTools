@@ -16,11 +16,11 @@ namespace Magicodes.CmdTools.CmdOptions
         public string FileOrDirPath { get; set; }
 
         [Option('s', "source", Required = true,
-          HelpText = "源字符串")]
+          HelpText = "源字符串（多个请以空格分隔）")]
         public string Source { get; set; }
 
         [Option('t', "target", Required = true,
-          HelpText = "目标字符串")]
+          HelpText = "目标字符串（多个请以空格分隔）")]
         public string Target { get; set; }
 
         [Option('i', "replacetext", HelpText = "是否替换文本")]
