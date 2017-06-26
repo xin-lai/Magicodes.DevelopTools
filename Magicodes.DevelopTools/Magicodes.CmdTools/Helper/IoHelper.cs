@@ -32,7 +32,7 @@ namespace Magicodes.CmdTools.Helper
             }
             else
             {
-               
+
                 if (!string.IsNullOrEmpty(ignore))
                 {
                     var q = ignoreDic.ContainsKey(ignore) ? ignoreDic[ignore] : ignore.Split(';').Distinct().Where(p => !string.IsNullOrWhiteSpace(p)).AsQueryable();
@@ -63,7 +63,7 @@ namespace Magicodes.CmdTools.Helper
                         }
                     }
                 }
-               
+
             }
             Console.ForegroundColor = ConsoleColor.Black;
             return flag;
@@ -99,9 +99,13 @@ namespace Magicodes.CmdTools.Helper
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                targetFilePath = Path.Combine(targetFilePath, Path.GetFileName(sourceFilePath));
+                var targetFileName = Path.GetFileName(targetFilePath);
+                if (string.IsNullOrWhiteSpace(targetFileName) || !targetFileName.Contains("."))
+                    targetFilePath = Path.Combine(targetFilePath, Path.GetFileName(sourceFilePath));
+
                 if (IsIgnore(ignore, targetFilePath))
                     return;
+
                 File.Copy(sourceFilePath, targetFilePath, true);
             }
             else

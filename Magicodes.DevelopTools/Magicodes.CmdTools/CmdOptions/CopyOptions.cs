@@ -44,16 +44,9 @@ namespace Magicodes.CmdTools.CmdOptions
             var targetPath = IoHelper.GetAbsolutePath(option.Target);
             Console.WriteLine("sourcePath：" + sourcePath);
             Console.WriteLine("targetPath：" + targetPath);
-            if (string.IsNullOrEmpty(option.Ignore))
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("没有设置忽略文件，所有文件都将被复制！");
-                Console.ForegroundColor = ConsoleColor.Black;
-            }
-            else
-            {
-                Console.WriteLine("即将忽略以下内容：" + option.Ignore);
-            }
+            Console.WriteLine("config：" + option.Config);
+            Console.WriteLine("ignore：" + option.Ignore);
+            
             if (string.IsNullOrWhiteSpace(option.Config))
             {
                 Console.WriteLine("即将执行复制");
@@ -70,6 +63,7 @@ namespace Magicodes.CmdTools.CmdOptions
             }
             else
             {
+                Console.WriteLine("正在加载配置...");
                 var configPath = IoHelper.GetAbsolutePath(option.Config);
                 if (!File.Exists(configPath))
                 {
@@ -77,6 +71,7 @@ namespace Magicodes.CmdTools.CmdOptions
                     Console.ReadLine();
                     return;
                 }
+                Console.WriteLine("已找到配置文件，准备读取配置...");
                 var lines = File.ReadAllLines(configPath);
                 foreach (var item in lines)
                 {
